@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %} Profile page {% endblock %}
+
+{% block content %}
+    <div class="container align-items-center justify-content-center d-flex">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card" style="width: 25rem">
+                    <img src="{{ user.profile_image.url }}" class="card-img-top img-fluid" alt="Profile Image">
+                    <hr>
+                    <div class="card-body">
+                        <h2 class="card-title"><b>User Profile</b></h2>
+                        <p class="card-text">
+                            <p><b>Username:</b> {{ user.username }}</p>
+                            <p><b>First name:</b> {% if user.first_name %} {{ user.first_name }} {% else %} None {% endif %}</p>
+                            <p><b>Last name:</b> {% if user.last_name %} {{ user.last_name }} {% else %} None {% endif %}</p>
+                            <p><b>Email:</b> {% if user.email %} {{ user.email }} {% else %} None {% endif %}</p>
+                            <p><b>Date joined:</b> {{ user.date_joined | date:"M d, Y" }}</p>
+                        </p>
+
+                        <a href="{% url 'users:profile_edit' %}" class="btn btn-primary">Edit Profile</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

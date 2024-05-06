@@ -1,0 +1,10 @@
+# Virtual environment
+venv/
+
+# Python and IDE files
+__pycache__/
+.idea/
+.env
+
+# Media files
+media-files/

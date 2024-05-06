@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home Page {% endblock %}
+{% block css %}<link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css">{% endblock %}
+
+{% block content %}
+    <div class="container posts-content">
+        <h1 class="d-flex justify-content-center fw-bold">All Reviews</h1>
+        {% for review in page_obj %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                      <div class="card-body">
+                        <div class="media mb-3">
+                          <img src="{{ review.user.profile_image.url }}" class="d-block ui-w-40 rounded-circle" alt="">
+                          <div class="media-body ml-3">
+                              {% if review.user.first_name or review.user.last_name %}
+                                {{ review.user.first_name }} {{ review.user.last_name }}
+                              {% else %}
+                                {{ review.user.username }}
+                              {% endif %}
+                            <div class="text-muted small">{{ review.created_at | date:'M d, h:m A' }}</div>
+                          </div>
+                        </div>
+
+                        <p class="font-monospace">
+                          {{ review.comment | truncatewords:100 }}
+                        </p>
+                          <img src="{{ review.book.cover_picture.url }}" alt="Book Cover Picture" class="ui-rect ui-bg-cover cover-picture">
+{#                        <a href="javascript:void(0)" class="ui-rect ui-bg-cover" style="background-image: url({{ review.book.cover_picture.url }});"></a>#}
+                      </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- Pagination -->
+        <nav class="d-flex justify-content-center mt-5">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a href="?page=1&page_size={{ page_size }}" class="page-link">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ page_obj.previous_page_number }}&page_size={{ page_size }}" class="page-link">Previous</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">&laquo; First</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">Previous</a>
+                    </li>
+                {% endif %}
+
+                {% for page_number in page_obj.paginator.page_range %}
+                    {% if page_obj.number == page_number %}
+                        <li class="page-item active">
+                            <a href="?page={{ page_number }}&page_size={{ page_size }}" class="page-link">{{ page_number }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a href="?page={{ page_number }}&page_size={{ page_size }}" class="page-link">{{ page_number }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ page_obj.next_page_number }}&page_size={{ page_size }}" class="page-link">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a href="?page={{ page_obj.paginator.num_pages }}&page_size={{ page_size }}" class="page-link">Last &raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">Next</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">Last &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endblock %}

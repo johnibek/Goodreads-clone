@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Books List {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="mb-5 text-center"><b>All Books</b></h1>
+
+        <!-- Search Box -->
+        <div class="row mb-5 d-flex justify-content-center">
+            <div class="col-5">
+                <form method="get" class="d-flex">
+                    <input type="search" placeholder="Search" class="form-control border-end-0 border rounded-pill" name="q" value="{{ search_query }}">
+                    <button class="btn btn-primary border rounded-pill ms-1"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
+        </div>
+
+        {% if page_obj %}
+            {% for book in page_obj.object_list %}
+                <div class="row mb-3">
+                    <div class="col-3">
+                        <a href="{% url 'books:detail' book.id %}"><img src="{{ book.cover_picture.url }}" alt="Cover Picture" style="width: 263px; height: 400px"></a>
+                    </div>
+                    <div class="col-7">
+                        <a href="{% url 'books:detail' book.id %}" class="h2"><p class="mb-3 text-primary">{{ book.title }}</p></a>
+                        <p>{{ book.description | truncatewords:"100" }} </p>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            <nav class="d-flex justify-content-center mt-5">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a href="?page=1&page_size={{ page_size }}" class="page-link">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.previous_page_number }}&page_size={{ page_size }}" class="page-link">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">&laquo; First</a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for page_number in page_obj.paginator.page_range %}
+                        {% if page_obj.number == page_number %}
+                            <li class="page-item active">
+                                <a href="?page={{ page_number }}&page_size={{ page_size }}" class="page-link">{{ page_number }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a href="?page={{ page_number }}&page_size={{ page_size }}" class="page-link">{{ page_number }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.next_page_number }}&page_size={{ page_size }}" class="page-link">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a href="?page={{ page_obj.paginator.num_pages }}&page_size={{ page_size }}" class="page-link">Last &raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">Next</a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a href="#" class="page-link">Last &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+        {% else %}
+            <p>No books found.</p>
+        {% endif %}
+    </div>
+{% endblock %}
