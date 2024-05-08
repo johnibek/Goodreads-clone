@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} About {% endblock %}
+{% block css %} <link rel="stylesheet" href="{% static 'css/about.css' %}" type="text/css"> {% endblock %}
+
+{% block content %}
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-8 offset-2">        
+                <div class="row d-flex justify-content-center mb-4">
+                    <div class="image-container">
+                        <img src="{% static 'images/ABOUT.jpg' %}" alt="Bookshelf">
+                        <div class="overlay-text">The right book in the right hands at the right time can change the world.</div>
+                    </div>
+                </div>
+                <h2 class="mb-2">Who We Are</h2>
+                <p class="mb-3">
+                    Goodreads is the world’s largest site for readers and book recommendations. 
+                    Our mission is to help readers discover books they love and get more out of reading. 
+                    Goodreads launched in January 2007.
+                </p>
+
+                <h2 class="mb-2">A Few Things You Can Do On Goodreads</h2>
+                <ul class="mb-3">
+                    <li>See what books your friends are reading.</li>
+                    <li>Track the books you're reading, have read, and want to read.</li>
+                    <li>Check out your personalized book recommendations. Our recommendation engine analyzes 20 billion data points to give suggestions tailored to your literary tastes.</li>
+                    <li>Find out if a book is a good fit for you from our community’s reviews.</li>
+                </ul>
+
+                <h2 class="mb-2">A Message From Our Co-Founder</h2>
+                <p>
+                    When I was in second grade, I discovered the Hardy Boys series. Ever since, I've loved to read — both for fun and to improve my mind. And I'm always looking for the next great book.
+                </p>
+                <p>
+                    One afternoon while I was scanning a friend's bookshelf for ideas, it struck me: when I want to know what books to read, I'd rather turn to a friend than any random person or bestseller list.
+                </p>
+                <p>
+                    So I decided to build a website – a place where I could see my friends' bookshelves and learn about what they thought of all their books. Elizabeth, my co-founder (and now my wife) wrote the site copy and I wrote the code. We started in my living room, motivated by the belief that there was a better way to discover and discuss good books, and that we could build it.
+                </p>
+                <p>
+                    Goodreads is that site. It is a place where you can see what your friends are reading and vice versa. You can create "bookshelves" to organize what you've read (or want to read). You can comment on each other's reviews. You can find your next favorite book. And on this journey with your friends you can explore new territory, gather information, and expand your mind. 
+                </p>
+                <p>
+                    Knowledge is power, and power is best shared among readers. 
+                </p>
+                <div class="misc-otis-sig fs-1" style="font-family: 'Best Signature Font', sans-serif;">Otis</div>
+                <p>Otis Chandler <br> Co-Founder</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

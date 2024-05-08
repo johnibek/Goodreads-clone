@@ -3,15 +3,15 @@ from django.dispatch import receiver
 from django.core.mail import send_mail
 
 from .models import CustomUser
+from users.tasks import send_email
 
 @receiver(post_save, sender=CustomUser)
 def send_welcome_email(sender, instance, created, **kwargs):
     if created:
         if instance.email:
-            send_mail(
+            send_email.delay(
                 "Welcome to Goodreads Clone",
                 f"Hi, {instance.username}. You have successfully registered. Enjoy the books and reviews.",
-                "jonibekhamroqulov2004@gmail.com",
                 [instance.email]
             )
 

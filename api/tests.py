@@ -33,6 +33,12 @@ class BookReviewAPITestCase(APITestCase):
         self.assertEqual(response.data['user']['last_name'], 'Watson')
         self.assertEqual(response.data['user']['email'], 'john@mail.com')
 
+        # Test for review that is not available
+        response = self.client.get(reverse('api:review-detail', kwargs={'id': 2}))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.data['detail'], 'No BookReview matches the given query.')
+
     def test_delete_review(self):
         book = Book.objects.create(title='book1', description='description1', isbn='12345678')
         book_review = BookReview.objects.create(user=self.user, book=book, stars_given=5, comment='Very good book')

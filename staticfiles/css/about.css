@@ -1,0 +1,26 @@
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+  
+.image-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.overlay-text {
+    position: absolute;
+    /* top: 50%;  */
+    /* left: 25%;  */
+    /* right: 25%; */
+    bottom: 0;
+    /* transform: translate(-50%, -50%);  */
+    /* background-color: #000000;  */
+    color: #fff; 
+    padding: 10px 20px; 
+    font-size: 38px; 
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+}

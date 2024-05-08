@@ -1,0 +1,44 @@
+{% url 'home_page' as home_page_url %}
+{% url 'books:list' as books_list_url %}
+{% url 'users:profile' as user_profile_url %}
+{% url 'about_page' as about_page_url %}
+
+<nav class="navbar navbar-expand-lg mb-3 border-bottom border-body" style="background-color: #cbc4ae;">
+    <div class="container-fluid">
+        <a class="navbar-brand fs-2 me-5 p-0" href="{% url 'landing_page' %}"><b>goodreads</b></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navbar">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == home_page_url %} active {% endif %} me-2 fs-5" aria-current="page" href="{{ home_page_url }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == books_list_url %} active {% endif %} me-2 fs-5" aria-current="page" href="{{ books_list_url }}">Books</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == about_page_url %} active {% endif %} fs-5" aria-current="page" href="{{ about_page_url }}">About</a>
+                </li>
+            </ul>
+
+            <div>
+                {% if user.is_authenticated %}
+                    <div class="dropdown-center me-5 dropstart">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ user.username }}
+                      </button>
+                      <ul class="dropdown-menu" id="navbar2">
+                        <li><a class="dropdown-item" href="{% url 'users:profile' %}">Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'users:logout' %}">Logout</a></li>
+                      </ul>
+                    </div>
+
+                {% else %}
+                    <a href="{% url 'users:register' %}" class="btn btn-success">Register</a>
+                    <a href="{% url 'users:login' %}" class="btn btn-primary">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

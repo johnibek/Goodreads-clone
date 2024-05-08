@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -19,7 +21,7 @@ class BookListView(View):
         books = Book.objects.all().order_by('-id')
         search_query = request.GET.get('q', '')
         if search_query:
-            books = books.filter(title__icontains=search_query)
+            books = books.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query))
         page_size = request.GET.get('page_size', 2)
         paginator = Paginator(books, page_size)
 
@@ -39,7 +41,12 @@ class BookListView(View):
 
 class BookDetailView(View):
     def get(self, request, id):
-        book = Book.objects.get(id=id)
+        try:
+            book = Book.objects.get(id=id)
+        except Book.DoesNotExist:
+            # raise Http404("The Book With This ID Does Not Exist!!!")
+            return render(request, '404.html')
+
         form = BookReviewForm()
         book_reviews = book.reviews.all().order_by('-id')
         context = {

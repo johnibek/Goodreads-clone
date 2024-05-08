@@ -15,3 +15,9 @@ def home_page(request):
     page_obj = paginator.get_page(page_num)
 
     return render(request, 'home_page.html', {'page_obj': page_obj, 'page_size': page_size})
+
+def about_page(request):
+    return render(request, 'about.html', {})
+
+def handler404(request, exception):
+    return render(request, '404.html', status='404')
