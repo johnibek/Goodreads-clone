@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %} Author detail {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                <img src="{{ author_detail.image.url }}" alt="Author Image" style="width: 290px; height: 290px;">
+            </div>
+            <div class="col-7 ms-3">
+                <h3 class="fw-bold">{{ author_detail.first_name }} {{ author_detail.last_name }}</h3>
+                <hr>
+                <p class="mb-0"><small class="me-4"><b>Email:</b></small><small class="text-primary">{{ author_detail.email }}</small></p>
+                <p class="mb-3"><small class="me-4"><b>Twitter:</b></small><small class="text-primary">{{ author_detail.twitter }}</small></p>
+                <p>{{ author_detail.bio }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -17,7 +17,9 @@ class Author(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField()
+    twitter = models.URLField(blank=True, null=True)
     bio = models.TextField()
+    image = models.ImageField(default='default_profile_pic.jpg')
 
     def __str__(self):
         return self.first_name + " " + self.last_name

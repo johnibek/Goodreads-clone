@@ -17,9 +17,9 @@
                     Authored by
                     {% for book_author in book.bookauthor_set.all %}
                         {% if forloop.last %}
-                            <b>{{ book_author.author.full_name }}</b>
+                            <b><a href="{% url 'books:author-detail' book.id book_author.author.id %}">{{ book_author.author.full_name }}</a></b>
                         {% else %}
-                            <b>{{ book_author.author.full_name }},</b>
+                            <b><a href="{% url 'books:author-detail' book.id book_author.author.id %}">{{ book_author.author.full_name }}</a>,</b>
                         {% endif %}
                     {% endfor %}
                 </p>

@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from .models import Book, BookReview
+from .models import Book, BookReview, Author
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.core.paginator import Paginator
@@ -21,7 +21,7 @@ class BookListView(View):
         books = Book.objects.all().order_by('-id')
         search_query = request.GET.get('q', '')
         if search_query:
-            books = books.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query))
+            books = books.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query) | Q(bookauthor__author__first_name__icontains=search_query))
         page_size = request.GET.get('page_size', 2)
         paginator = Paginator(books, page_size)
 
@@ -113,3 +113,10 @@ class DeleteReviewView(LoginRequiredMixin, View):
         messages.success(request, 'You have successfully deleted this review.')
 
         return redirect(reverse('books:detail', kwargs={'id': book.id}))
+
+class AuthorDetailView(View):
+    def get(self, request, book_id, author_id):
+        book = Book.objects.get(id=book_id)
+        # author_detail = book.bookauthor_set.get(id=author_id)
+        author_detail = Author.objects.get(id=author_id)
+        return render(request, 'authors/author_detail.html', {'book': book, 'author_detail': author_detail})
