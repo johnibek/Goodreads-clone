@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from .models import Book, BookReview, Author
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import generic
 from django.core.paginator import Paginator
 from .forms import BookReviewForm, EditAuthorForm
@@ -121,7 +121,10 @@ class AuthorDetailView(View):
         author_detail = Author.objects.get(id=author_id)
         return render(request, 'authors/author_detail.html', {'book': book, 'author_detail': author_detail})
 
-class EditAuthorDetailView(LoginRequiredMixin, View):
+class EditAuthorDetailView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser
+
     def get(self, request, book_id, author_id):
         review = Author.objects.get(id=author_id)
         form = EditAuthorForm(instance=review)

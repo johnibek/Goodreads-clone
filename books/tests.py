@@ -242,6 +242,9 @@ class EditAuthorDetailTestCase(TestCase):
         self.user.save()
         self.client.login(username='user', password='somepassword')
     def test_edit_author(self):
+        self.user.is_superuser = True
+        self.user.save()
+
         book = Book.objects.create(title='book1', description='description1', isbn='12345678')
         author = Author.objects.create(first_name='John',
                                        last_name='Watson',
@@ -281,3 +284,43 @@ class EditAuthorDetailTestCase(TestCase):
         self.assertContains(response, 'https://twitter.com/john1')
         self.assertContains(response, 'bio2')
 
+
+    def test_author_detail_for_not_admin_user(self):
+        book = Book.objects.create(title='book1', description='description1', isbn='12345678')
+        author = Author.objects.create(first_name='John',
+                                       last_name='Watson',
+                                       email='john@mail.com',
+                                       twitter='https://twitter.com/john',
+                                       bio='bio')
+
+        bookauthor = BookAuthor.objects.create(book=book, author=author)
+
+        response = self.client.post(
+            reverse('books:edit-author-detail', kwargs={'book_id': book.id, 'author_id': author.id}),
+            data={
+                'first_name': 'John1',
+                'last_name': 'Watson1',
+                'email': 'john1@mail.com',
+                'twitter': 'https://twitter.com/john1',
+                'bio': 'bio1'
+            }
+        )
+
+        author.refresh_from_db()
+
+        self.assertEqual(response.status_code, 403)
+        self.assertNotEqual(author.first_name, 'John1')
+        self.assertNotEqual(author.last_name, 'Watson1')
+        self.assertNotEqual(author.email, 'john1@mail.com')
+        self.assertNotEqual(author.twitter, 'https://twitter.com/john1')
+        self.assertNotEqual(author.bio, 'bio1')
+
+        response = self.client.get(
+            reverse('books:author-detail', kwargs={'book_id': book.id, 'author_id': author.id})
+        )
+
+        self.assertContains(response, 'John')
+        self.assertContains(response, 'Watson')
+        self.assertContains(response, 'john@mail.com')
+        self.assertContains(response, 'https://twitter.com/john')
+        self.assertContains(response, 'bio')
