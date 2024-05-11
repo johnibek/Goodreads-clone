@@ -14,6 +14,9 @@
                 <p class="mb-0"><small class="me-4"><b>Email:</b></small><small class="text-primary">{{ author_detail.email }}</small></p>
                 <p class="mb-3"><small class="me-4"><b>Twitter:</b></small><small class="text-primary">{{ author_detail.twitter }}</small></p>
                 <p>{{ author_detail.bio }}</p>
+                {% if user.is_superuser %}
+                    <a href="{% url 'books:edit-author-detail' book.id author_detail.id %}" class="btn btn-primary">Edit Details</a>
+                {% endif %}
             </div>
         </div>
     </div>

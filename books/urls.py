@@ -11,4 +11,6 @@ urlpatterns = [
     path('<int:book_id>/reviews/<int:review_id>/delete/confirm', views.ConfirmDeleteReviewView.as_view(), name='confirm-delete-review'),
     path('<int:book_id>/reviews/<int:review_id>/delete', views.DeleteReviewView.as_view(), name='delete-review'),
     path('<int:book_id>/authors/<int:author_id>', views.AuthorDetailView.as_view(), name='author-detail'),
+    path('<int:book_id>/authors/<int:author_id>/edit', views.EditAuthorDetailView.as_view(), name='edit-author-detail'),
 ]
+

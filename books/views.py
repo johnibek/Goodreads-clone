@@ -8,7 +8,7 @@ from .models import Book, BookReview, Author
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.core.paginator import Paginator
-from .forms import BookReviewForm
+from .forms import BookReviewForm, EditAuthorForm
 
 # class BookListView(generic.ListView):
 #     template_name = 'books/list.html'
@@ -120,3 +120,19 @@ class AuthorDetailView(View):
         # author_detail = book.bookauthor_set.get(id=author_id)
         author_detail = Author.objects.get(id=author_id)
         return render(request, 'authors/author_detail.html', {'book': book, 'author_detail': author_detail})
+
+class EditAuthorDetailView(LoginRequiredMixin, View):
+    def get(self, request, book_id, author_id):
+        review = Author.objects.get(id=author_id)
+        form = EditAuthorForm(instance=review)
+        return render(request, 'authors/edit_author_detail.html', {'form': form})
+
+    def post(self, request, book_id, author_id):
+        book = Book.objects.get(id=book_id)
+        author = Author.objects.get(id=author_id)
+        form = EditAuthorForm(data=request.POST, instance=author, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'You have successfully updated the author data.')
+            return redirect(reverse('books:author-detail', kwargs={'book_id': book.id, 'author_id': author.id}))
+

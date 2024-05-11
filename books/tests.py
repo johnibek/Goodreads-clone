@@ -207,3 +207,77 @@ class BookReviewTestCase(TestCase):
         response = self.client.get(reverse('books:detail', kwargs={'id': self.book.id}))
 
         self.assertNotContains(response, review.comment)
+
+
+class AuthorDetailTestCase(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create(username='user', first_name='User')
+        self.user.set_password('somepassword')
+        self.user.save()
+        self.client.login(username='user', password='somepassword')
+    def test_author_detail(self):
+        book = Book.objects.create(title='book1', description='description1', isbn='12345678')
+        author = Author.objects.create(first_name='John',
+                                       last_name='Watson',
+                                       email='john@mail.com',
+                                       twitter='https://twitter.com/john',
+                                       bio='bio1')
+        book_author = BookAuthor.objects.create(book=book, author=author)
+
+        response = self.client.get(reverse('books:author-detail', kwargs={'book_id': book.id, 'author_id': author.id}))
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, author.first_name)
+        self.assertContains(response, author.last_name)
+        self.assertContains(response, author.email)
+        self.assertContains(response, author.twitter)
+        self.assertContains(response, author.bio)
+
+
+class EditAuthorDetailTestCase(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create(username='user', first_name='User')
+        self.user.set_password('somepassword')
+        self.user.save()
+        self.client.login(username='user', password='somepassword')
+    def test_edit_author(self):
+        book = Book.objects.create(title='book1', description='description1', isbn='12345678')
+        author = Author.objects.create(first_name='John',
+                                       last_name='Watson',
+                                       email='john@mail.com',
+                                       twitter='https://twitter.com/john',
+                                       bio='bio1')
+
+        bookauthor = BookAuthor.objects.create(book=book, author=author)
+
+        self.client.post(
+            reverse('books:edit-author-detail', kwargs={'book_id': book.id, 'author_id': author.id}),
+            data={
+                'first_name': 'John1',
+                'last_name': 'Watson1',
+                'email': 'john1@mail.com',
+                'twitter': 'https://twitter.com/john1',
+                'bio': 'bio2'
+            }
+        )
+
+        author.refresh_from_db()
+
+        self.assertEqual(author.first_name, 'John1')
+        self.assertEqual(author.last_name, 'Watson1')
+        self.assertEqual(author.email, 'john1@mail.com')
+        self.assertEqual(author.twitter, 'https://twitter.com/john1')
+        self.assertEqual(author.bio, 'bio2')
+
+
+        response = self.client.get(
+            reverse('books:author-detail', kwargs={'book_id': book.id, 'author_id': author.id})
+        )
+
+        self.assertContains(response, 'John1')
+        self.assertContains(response, 'Watson1')
+        self.assertContains(response, 'john1@mail.com')
+        self.assertContains(response, 'https://twitter.com/john1')
+        self.assertContains(response, 'bio2')
+
